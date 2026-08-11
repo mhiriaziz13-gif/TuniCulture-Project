@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Client - Tunisia Tourism</title>
+     <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
+    <link rel="stylesheet" href="css/client.css">
+    
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="logout-btn" onclick="logout()">Déconnexion</button>
+            <h1>🇹🇳 Tunisia Tourism</h1>
+            <div class="user-info">
+                Bienvenue, <span id="userFullName"></span>
+            </div>
+        </div>
+
+        <div class="dashboard-tabs">
+            <button class="tab-btn active" onclick="switchTab('nouvelle-reservation')">Nouvelle Réservation</button>
+            <button class="tab-btn" onclick="switchTab('mes-reservations')">Mes Réservations</button>
+            <button class="tab-btn" onclick="switchTab('destinations')">Destinations</button>
+            <button class="tab-btn" onclick="switchTab('mon-profil')">Mon Profil</button>
+        </div>
+
+        <!-- Nouvelle Réservation -->
+        <div id="nouvelle-reservation" class="tab-content active">
+            <div class="card">
+                <h2 style="margin-bottom: 25px; color: #2c3e50;">🎯 Nouvelle Réservation</h2>
+                
+                <form class="contact-form" id="reservationForm">
+                    <div class="form-group">
+                        <label for="destination">Destination</label>
+                        <select id="destination" name="destination" required>
+                            <option value="" disabled selected>Sélectionnez une destination</option>
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="telephone">Numéro de téléphone</label>
+                        <input type="tel" id="telephone" name="telephone" placeholder="+33 6 12 34 56 78" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="dateDepart">Date de départ</label>
+                        <input type="date" id="dateDepart" name="dateDepart" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="adultes">Adultes</label>
+                            <select id="adultes" name="adultes" required>
+                                <option value="1">1</option>
+                                <option value="2" selected>2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5+</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="enfants">Enfants (-12 ans)</label>
+                            <select id="enfants" name="enfants">
+                                <option value="0" selected>0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4+</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="experience">Expérience souhaitée</label>
+                        <select id="experience" name="experience" required>
+                            <option value="" disabled selected>Sélectionnez une expérience</option>
+                            <option value="randonnee">🥾 Randonnée au Djebel Zaghouan</option>
+                            <option value="dromadaire">🐪 Balade en dromadaire</option>
+                            <option value="cuisine">👨‍🍳 Atelier culinaire</option>
+                            <option value="festival">🎭 Festival International de Carthage</option>
+                            <option value="circuit">🏛️ Circuit culturel complet</option>
+                            <option value="autre">✨ Autre (précisez)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" id="autreExperienceGroup" style="display: none;">
+                        <label for="autreExperience">Précisez votre expérience</label>
+                        <input type="text" id="autreExperience" name="autreExperience" placeholder="Décrivez l'expérience souhaitée">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="commentaires">Demandes spéciales</label>
+                        <textarea id="commentaires" name="commentaires" placeholder="Régime alimentaire spécial, assistance particulière..." rows="3"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="submitReservation">
+                        <span>Confirmer la réservation</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                            <path fill="none" d="M0 0h24v24H0z"/>
+                            <path d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z" fill="currentColor"/>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Mes Réservations -->
+        <div id="mes-reservations" class="tab-content">
+            <div class="card">
+                <h2 style="margin-bottom: 25px; color: #2c3e50;">📋 Mes Réservations</h2>
+                <div id="reservationsList">
+                    <div class="alert alert-info">
+                        Chargement de vos réservations...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Destinations -->
+        <div id="destinations" class="tab-content">
+            <div class="card">
+                <h2 style="margin-bottom: 25px; color: #2c3e50;">🏝️ Destinations Disponibles</h2>
+                <div id="destinationsList">
+                    <div class="alert alert-info">
+                        Chargement des destinations...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mon Profil -->
+        <div id="mon-profil" class="tab-content">
+            <div class="card">
+                <h2 style="margin-bottom: 25px; color: #2c3e50;">👤 Mon Profil</h2>
+                
+                <form class="contact-form" id="profileForm">
+                    <div class="form-group">
+                        <label for="profileFullName">Nom complet</label>
+                        <input type="text" id="profileFullName" name="fullName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="profileEmail">Email</label>
+                        <input type="email" id="profileEmail" name="email" readonly style="background-color: #f8f9fa;">
+                        <small style="color: #6c757d;">L'email ne peut pas être modifié</small>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="updateProfileBtn">
+                        <span>Mettre à jour le profil</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                            <path fill="none" d="M0 0h24v24H0z"/>
+                            <path d="M15.728 9.686l-1.414-1.414L5 17.586V19h1.414l9.314-9.314zm1.414-1.414l1.414-1.414-1.414-1.414-1.414 1.414 1.414 1.414zM7.242 21H3v-4.243L16.435 3.322a1 1 0 0 1 1.414 0l2.829 2.829a1 1 0 0 1 0 1.414L7.243 21z" fill="currentColor"/>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour modifier une réservation -->
+    <div id="editReservationModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Modifier la réservation</h3>
+                <span class="close" onclick="closeEditModal()">&times;</span>
+            </div>
+            <form id="editReservationForm">
+                <input type="hidden" id="editReservationId">
+                
+                <div class="form-group">
+                    <label for="editDestination">Destination</label>
+                    <select id="editDestination" name="destination" required>
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editTelephone">Numéro de téléphone</label>
+                    <input type="tel" id="editTelephone" name="telephone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editDateDepart">Date de départ</label>
+                    <input type="date" id="editDateDepart" name="dateDepart" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editAdultes">Adultes</label>
+                        <select id="editAdultes" name="adultes" required>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5+</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editEnfants">Enfants (-12 ans)</label>
+                        <select id="editEnfants" name="enfants">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4+</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editExperience">Expérience souhaitée</label>
+                    <select id="editExperience" name="experience" required>
+                        <option value="randonnee">🥾 Randonnée au Djebel Zaghouan</option>
+                        <option value="dromadaire">🐪 Balade en dromadaire</option>
+                        <option value="cuisine">👨‍🍳 Atelier culinaire</option>
+                        <option value="festival">🎭 Festival International de Carthage</option>
+                        <option value="circuit">🏛️ Circuit culturel complet</option>
+                        <option value="autre">✨ Autre (précisez)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="editAutreExperienceGroup" style="display: none;">
+                    <label for="editAutreExperience">Précisez votre expérience</label>
+                    <input type="text" id="editAutreExperience" name="autreExperience">
+                </div>
+                
+                <div class="form-group">
+                    <label for="editCommentaires">Demandes spéciales</label>
+                    <textarea id="editCommentaires" name="commentaires" rows="3"></textarea>
+                </div>
+                
+                <div class="modal-buttons">
+                    <button type="button" class="btn-secondary" onclick="closeEditModal()">Annuler</button>
+                    <button type="submit" class="submit-btn">Sauvegarder</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/client.js"></script>
+</body>
+</html>

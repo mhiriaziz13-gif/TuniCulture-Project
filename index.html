@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tourisme Culturel Tunisien</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/form.css">
+</head>
+<body>
+    <section class="bar">
+        <div class="ligne-horizontale"></div>
+        <div class="navbar-content">
+            <div class="logo">
+                <img src="images\logo_tuniculture_high_res.png" alt="Logo Tourisme Tunisie">
+            </div>
+            <a class="titre" href="#accueil"></a>
+            <nav class="menu">
+                <a class="a" href="#accueil">Accueil</a>
+                <a class="a" href="#apropos">À propos</a>
+                <div class="dropdown">
+                    <a class="a" href="#destinations">Destinations ▼</a>
+                    <div class="dropdown-content">
+                        <a href="#carthage">Carthage</a>
+                        <a href="#sousse">Sousse</a>
+                        <a href="#kef">Le Kef</a>
+                        <a href="#djerba">Djerba</a>
+                        <a href="#sahara">Sahara</a>
+                        <a href="#tunis">Tunis</a>
+                        <a href="#hammamet">Hammamet</a>
+                    </div>
+                </div>
+            
+
+                <a class="a" href="#festivals">Festivals</a>
+                <a class="a" href="#experiences">Expériences</a>
+                <a class="a" href="#planifier">Planifier</a>
+                <a class="reserver" href="#reserver">Réserver</a>
+                <a class="reserver" href="login.html">Login</a>
+            </nav>
+        </div>
+        <div class="ligne-horizontale"></div>
+    </section>
+
+
+    <section id="accueil">
+        <div class="carousel">
+            <div class="slide">
+                <img src="images\douga.jpg" alt="Tunisie">
+            </div>
+            <div class="slide">
+                <img src="images\koutoubia-mosque-marrakech-sunrise.jpg" alt="Amphithéâtre d'El Jem">
+            </div>
+            <div class="slide">
+                <img src="images\Bizerte 🇹🇳📍.jpg" alt="Image d'accueil">
+            </div>
+        </div>
+        <div class="row">
+            <h1>Bienvenue en Tunisie</h1>
+            <p>
+                Découvrez la richesse culturelle de la Tunisie, un pays où l'histoire, la culture et la nature se rencontrent pour créer une expérience inoubliable.
+            </p>
+            <a href="#destinations" class="btn">Explorer la Tunisie</a>
+        </div>
+    </section>
+
+    <section id="apropos">
+        <div class="about-container">
+            <div class="tunisia-map">
+                <img src="images\carte tunisize.jpeg" alt="Carte de la Tunisie" class="main-map">
+                <div class="map-points">
+                    <div class="point tunis" data-city="Tunis - Capitale"></div>
+                    <div class="point sousse" data-city="Sousse - Perle du Sahel"></div>
+                    <div class="point djerba" data-city="Djerba - Île des rêves"></div>
+                    <div class="point sahara" data-city="Sahara - Désert mystique"></div>
+                </div>
+                <div class="map-tooltip"></div>
+                
+                <div class="infos-on-map">
+                    <div class="infos">
+                        <p><strong>Superficie :</strong> 163 610 km²</p>
+                        <p><strong>Population :</strong> 12 millions</p>
+                        <p><strong>Capitale :</strong> Tunis</p>
+                        <p><strong>Langue :</strong> Arabe (Français courant)</p>
+                        <p><strong>Monnaie :</strong> Dinar tunisien (TND)</p>
+                        <p><strong>Fuseau :</strong> GMT+1</p>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="tunisia-facts">
+                <h2>À propos de la <span class="highlight">Tunisie</span></h2>
+                
+                <div class="fact-cards">
+                    <div class="fact-card">
+                        <div class="fact-icon">🏛️</div>
+                        <div class="fact-content">
+                            <h3>Patrimoine Unique</h3>
+                            <p class="fact-detail">8 sites classés UNESCO dont :</p>
+                            <ul class="heritage-list">
+                                <li>Amphithéâtre d'El Jem</li>
+                                <li>Site de Carthage</li>
+                                <li>Médina de Tunis</li>
+                            </ul>
+                        </div>
+                    </div>
+    
+                    <div class="fact-card">
+                        <div class="fact-icon">🌞</div>
+                        <div class="fact-content">
+                            <h3>Climat Privilégié</h3>
+                            <p class="fact-value">300 <span>jours de soleil/an</span></p>
+                            <p class="fact-detail">Température moyenne : 18°C en hiver</p>
+                        </div>
+                    </div>
+    
+                    <div class="fact-card">
+                        <div class="fact-icon">🏖️</div>
+                        <div class="fact-content">
+                            <h3>Diversité Touristique</h3>
+                            <ul class="tourism-list">
+                                <li>1200 km de côtes</li>
+                                <li>40 oasis sahariennes</li>
+                                <li>26 stations balnéaires</li>
+                            </ul>
+                        </div>
+                    </div>
+    
+                    <div class="fact-card">
+                        <div class="fact-icon">🎭</div>
+                        <div class="fact-content">
+                            <h3>Culture Vivante</h3>
+                            <ul class="culture-list">
+                                <li>Festival international de Carthage</li>
+                                <li>Musique malouf classée UNESCO</li>
+                                <li>Artisanat ancestral</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="destinations" class="cultural-sites">
+        <div class="section-header">
+            <h2>Sites <span class="highlight">Culturels</span> & Historiques Incontournables</h2>
+            <p class="subtitle">Découvrez le patrimoine exceptionnel de la Tunisie, témoin de 3000 ans d'histoire</p>
+        </div>
+    
+        <div class="cards-container">
+            <div class="destination-card">
+                <div class="card-image">
+                    <img src="images\douga.jpg" alt="Ruines de Carthage" loading="lazy">
+                    <div class="unesco-badge">UNESCO</div>
+                    <div class="card-overlay"></div>
+                </div>
+                <div class="card-content">
+                    <h3>Carthage <span class="site-period">(VIIIe siècle av. J.-C.)</span></h3>
+                    <div class="card-details">
+                        <p class="site-description">Ancienne cité punique devenue capitale romaine d'Afrique, ses ruines témoignent de la grandeur des civilisations méditerranéennes.</p>
+                        <ul class="site-features">
+                            <li>Musée de Carthage</li>
+                            <li>Thermes d'Antonin</li>
+                            <li>Quartier punique</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <span class="location">📍 Tunis, 15km du centre</span>
+                        <a href="#carthage" class="discover-btn">Découvrir →</a>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="destination-card">
+                <div class="card-image">
+                    <img src="images\Amphitheatre of El Jem.jpg" alt="Amphithéâtre d'El Jem" loading="lazy">
+                    <div class="unesco-badge">UNESCO</div>
+                    <div class="card-overlay"></div>
+                </div>
+                <div class="card-content">
+                    <h3>Amphithéâtre d'El Jem <span class="site-period">(IIIe siècle)</span></h3>
+                    <div class="card-details">
+                        <p class="site-description">Le 3ème plus grand colisée romain au monde, exceptionnellement bien préservé, pouvant accueillir 35 000 spectateurs.</p>
+                        <ul class="site-features">
+                            <li>Architecture romaine intacte</li>
+                            <li>Festival international de musique</li>
+                            <li>Musée archéologique</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <span class="location">📍 Gouvernorat de Mahdia</span>
+                        <a href="#eljem" class="discover-btn">Découvrir →</a>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="destination-card">
+                <div class="card-image">
+                    <img src="images\Tunisia.jpg" alt="Médina de Tunis" loading="lazy">
+                    <div class="unesco-badge">UNESCO</div>
+                    <div class="card-overlay"></div>
+                </div>
+                <div class="card-content">
+                    <h3>Médina de Tunis <span class="site-period">(VIIe siècle)</span></h3>
+                    <div class="card-details">
+                        <p class="site-description">Cœur historique de la capitale avec ses ruelles animées, ses mosquées centenaires et ses souks colorés.</p>
+                        <ul class="site-features">
+                            <li>Mosquée Zitouna</li>
+                            <li>Souk des Chéchias</li>
+                            <li>Palais dar Hussein</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <span class="location">📍 Centre-ville de Tunis</span>
+                        <a href="#medina" class="discover-btn">Découvrir →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="section-footer">
+            <a href="#tous-les-sites" class="view-all-btn">Voir tous nos sites culturels (12+)</a>
+        </div>
+    </section>
+
+    <section id="festivals" class="festival-section">
+        <div class="section-header">
+            <h2>Les <span class="highlight">4 Meilleurs Festivals</span> de Tunisie</h2>
+            <p class="subtitle">Plongez au cœur des célébrations qui rythment la vie culturelle tunisienne</p>
+        </div>
+    
+        <div class="festival-grid">
+            <div class="festival-card">
+                <div class="festival-image">
+                    <img src="images\International-Festival-of-Carthage-scaled.jpg" alt="Festival International de Carthage" loading="lazy">
+                    <div class="festival-date">
+                        <span class="month">JUILLET</span>
+                        <span class="day">15</span>
+                        <span class="to">-</span>
+                        <span class="month">AOÛT</span>
+                        <span class="day">15</span>
+                    </div>
+                </div>
+                <div class="festival-content">
+                    <h3>Festival International de Carthage</h3>
+                    <div class="festival-info">
+                        <span class="location">📍 Carthage, Tunis</span>
+                        <span class="duration">● 1 mois</span>
+                    </div>
+                    <p class="festival-description">Le plus prestigieux festival d'Afrique et du monde arabe depuis 1964, accueillant stars internationales et talents locaux dans l'ancien théâtre romain.</p>
+                    <ul class="festival-highlights">
+                        <li>Concerts mythiques (Oum Kalthoum, Fairuz...)</li>
+                        <li>Spectacles dans un site antique classé UNESCO</li>
+                        <li>Ateliers et rencontres artistiques</li>
+                    </ul>
+                    <a href="#fic" class="festival-btn">Programme 2024 →</a>
+                </div>
+            </div>
+    
+            <div class="festival-card">
+                <div class="festival-image">
+                    <img src="images\festival douz.jpg" alt="Festival du Sahara de Douz" loading="lazy">
+                    <div class="festival-date">
+                        <span class="month">DÉCEMBRE</span>
+                        <span class="day">20</span>
+                        <span class="to">-</span>
+                        <span class="day">24</span>
+                    </div>
+                </div>
+                <div class="festival-content">
+                    <h3>Festival International du Sahara</h3>
+                    <div class="festival-info">
+                        <span class="location">📍 Douz, Porte du désert</span>
+                        <span class="duration">● 4 jours</span>
+                    </div>
+                    <p class="festival-description">"La Mecque des nomades" célèbre depuis 1910 les traditions bédouines avec courses de méharis, danses folkloriques et mariages traditionnels.</p>
+                    <ul class="festival-highlights">
+                        <li>Fantasia (spectacle équestre)</li>
+                        <li>Compétitions de chameaux</li>
+                        <li>Marché artisanal nomade</li>
+                    </ul>
+                    <a href="#douz" class="festival-btn">Infos pratiques →</a>
+                </div>
+            </div>
+    
+<div class="festival-card">
+    <div class="festival-image">
+        <img src="images\fest awessou.jpg" alt="Festival International d'Aoussou Sousse" loading="lazy">
+        <div class="festival-date">
+            <span class="month">AOÛT</span>
+            <span class="day">1</span>
+            <span class="to">-</span>
+            <span class="day">15</span>
+        </div>
+    </div>
+    <div class="festival-content">
+        <h3>Festival International d'Aoussou</h3>
+        <div class="festival-info">
+            <span class="location">📍 Sousse, Perle du Sahel</span>
+            <span class="duration">● 15 jours</span>
+        </div>
+        <p class="festival-description">Événement estival incontournable depuis 1958, célébrant les arts populaires dans la magnifique citadelle de Sousse.</p>
+        <ul class="festival-highlights">
+            <li>Spectacles folkloriques traditionnels</li>
+            <li>Défilés en costumes d'époque</li>
+            <li>Concerts en médina illuminée</li>
+        </ul>
+        <a href="#aoussou" class="festival-btn">Programme →</a>
+    </div>
+</div>
+    
+            <div class="festival-card">
+                <div class="festival-image">
+                    <img src="images\testour-.webp" alt="Festival de la Musique Andalouse de Testour" loading="lazy">
+                    <div class="festival-date">
+                        <span class="month">MAI</span>
+                        <span class="day">10</span>
+                        <span class="to">-</span>
+                        <span class="day">15</span>
+                    </div>
+                </div>
+                <div class="festival-content">
+                    <h3>Festival de la Musique Andalouse</h3>
+                    <div class="festival-info">
+                        <span class="location">📍 Testour, Ville andalouse</span>
+                        <span class="duration">● 5 jours</span>
+                    </div>
+                    <p class="festival-description">Hommage à l'héritage musical des Morisques, ce festival unique préserve le patrimoine arabo-andalou dans la ville aux influences hispano-mauresques.</p>
+                    <ul class="festival-highlights">
+                        <li>Concerts de malouf et muwashshah</li>
+                        <li>Conférences sur l'histoire andalouse</li>
+                        <li>Ateliers de lutherie traditionnelle</li>
+                    </ul>
+                    <a href="#testour" class="festival-btn">Réserver →</a>
+                </div>
+            </div>
+        </div>
+    
+        <div class="section-footer">
+            <a href="#tous-les-festivals" class="view-all-btn">Voir tous nos festivals (15+)</a>
+        </div>
+    </section>
+
+<section id="experiences" class="immersive-experiences">
+    <div class="experience-header">
+        <h2>Expériences <span class="highlight">Immersives</span> en Tunisie</h2>
+        <p class="subtitle">Vivez la Tunisie au-delà des visites touristiques</p>
+    </div>
+
+    <div class="experience-block zaghouan-bg">
+        <div class="experience-content">
+            <div class="experience-text">
+                <span class="experience-category">Aventure & Nature</span>
+                <div class="experience-badge">🌟 TOP VENTE</div>
+                <h3>Randonnée au Djebel Zaghouan</h3>
+                <div class="experience-details">
+                    <span class="duration">⏱ 4-6 heures</span>
+                    <span class="difficulty">⭐ Difficulté moyenne</span>
+                    <span class="price">À partir de <strong>120 TND</strong>/pers</span>
+                </div>
+                <p class="experience-description">
+                    Gravissez le "Mont Blanc tunisien" (1295m) à travers des sentiers olfactifs de thym et de romarin. 
+                    Votre effort sera récompensé par un panorama à 360° s'étendant jusqu'à la Méditerranée, 
+                    suivi d'une dégustation de thé aux pignons chez l'habitant.
+                </p>
+                
+                <div class="customer-reviews">
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="average">4.9/5</span>
+                        <span class="count">(127 avis)</span>
+                    </div>
+                    <div class="review-excerpt">
+                        <img src="images\homme tun.jpg" alt="Avatar" class="review-avatar">
+                        <div class="review-text">
+                            <strong>"Inoubliable !"</strong>
+                            <p>"Notre guide Ali était exceptionnel. Les vues valent chaque effort !" - Sophie L.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="experience-highlights">
+                    <div class="highlight-item">
+                        <span class="highlight-icon">👁️</span>
+                        <span>Vue sur le temple des eaux romain</span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="highlight-icon">📸</span>
+                        <span>Spot photo exceptionnel</span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="highlight-icon">🌿</span>
+                        <span>Flore méditerranéenne unique</span>
+                    </div>
+                </div>
+                <a href="#randonnee" class="experience-cta">Réserver cette expérience</a>
+            </div>
+            <div class="experience-gallery">
+                <img src="images\The Water Temple, Zaghouan, Tunisia.jpeg" alt="Sentier de randonnée" loading="lazy">
+                <img src="images\Faire de la randonnée en famille _ Lonely Planet.jpg" alt="Sommet de Zaghouan" loading="lazy">
+            </div>
+        </div>
+    </div>
+
+    <div class="experience-block sahara-bg">
+        <div class="experience-content reverse">
+            <div class="experience-text">
+                <span class="experience-category">Désert & Traditions</span>
+                <div class="experience-badge new">NOUVEAU</div>
+                <h3>Balade en dromadaire au coucher du soleil</h3>
+                <div class="experience-details">
+                    <span class="duration">⏱ 2 heures</span>
+                    <span class="difficulty">⭐ Facile</span>
+                    <span class="price">À partir de <strong>80 TND</strong>/pers</span>
+                </div>
+                <p class="experience-description">
+                    Envolez-vous pour une excursion magique dans les dunes dorées de Douz, 
+                    la "Porte du Sahara". Votre méhari vous conduira à un camp bédouin authentique 
+                    où vous attendent thé à la menthe, pain traditionnel cuit sous le sable 
+                    et une nuit sous un ciel constellé d'étoiles.
+                </p>
+                
+                <div class="customer-reviews">
+                    <div class="rating">
+                        <span class="stars">★★★★☆</span>
+                        <span class="average">4.7/5</span>
+                        <span class="count">(89 avis)</span>
+                    </div>
+                    <div class="review-excerpt">
+                        <img src="images\homme tun.jpg" alt="Avatar" class="review-avatar">
+                        <div class="review-text">
+                            <strong>"Magique"</strong>
+                            <p>"Le coucher de soleil sur les dunes est un moment qu'on n'oublie pas." - Marc D.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="experience-highlights">
+                    <div class="highlight-item">
+                        <span class="highlight-icon">🐫</span>
+                        <span>Dromadaires bien traités</span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="highlight-icon">🌅</span>
+                        <span>Coucher de soleil magique</span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="highlight-icon">🛖</span>
+                        <span>Dîner chez les nomades</span>
+                    </div>
+                </div>
+                <div class="option-buttons">
+                    <a href="#dromadaire" class="option-btn">1h (60 TND)</a>
+                    <a href="#dromadaire" class="option-btn active">2h (80 TND)</a>
+                    <a href="#dromadaire" class="option-btn">Nuit (150 TND)</a>
+                </div>
+            </div>
+            <div class="experience-gallery">
+                <img src="images\Rinos.jpg" alt="Balade en dromadaire" loading="lazy">
+                <img src="images\dromadair etun.jpg" alt="Camp bédouin" loading="lazy">
+            </div>
+        </div>
+    </div>
+
+    <div class="experience-block cooking-bg">
+        <div class="experience-content">
+            <div class="experience-text">
+                <span class="experience-category">Gastronomie</span>
+                <h3>Atelier culinaire chez l'habitant</h3>
+                <div class="experience-details">
+                    <span class="duration">⏱ 3 heures</span>
+                    <span class="difficulty">👨‍🍳 Tous niveaux</span>
+                    <span class="price">À partir de <strong>95 TND</strong>/pers</span>
+                </div>
+                <p class="experience-description">
+                    Apprenez les secrets de la cuisine tunisienne dans une maison bleue typique 
+                    avec vue sur la baie de Tunis. Préparation d'un menu complet (salade méchouia, 
+                    couscous, tajine) suivi d'une dégustation conviviale sur la terrasse.
+                </p>
+                
+                <!-- Avis Clients -->
+                <div class="customer-reviews">
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="average">4.8/5</span>
+                        <span class="count">(64 avis)</span>
+                    </div>
+                    <div class="review-excerpt">
+                        <img src="images/avatar3.jpg" alt="Avatar" class="review-avatar">
+                        <div class="review-text">
+                            <strong>"Délicieux et instructif"</strong>
+                            <p>"Fatima nous a appris des techniques que j'utilise encore à la maison." - Élodie P.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="experience-highlights">
+                    <div class="highlight-item">
+                        <span class="highlight-icon">🧑‍🍳</span>
+                        <span>Recettes authentiques</span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="highlight-icon">🛒</span>
+                        <span>Marché local inclus</span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="highlight-icon">📜</span>
+                        <span>Carnet de recettes offert</span>
+                    </div>
+                </div>
+                <a href="#cooking" class="experience-cta">Voir les dates disponibles</a>
+            </div>
+            <div class="experience-gallery">
+                <img src="images\cours de cuisine.jpg" alt="Cours de cuisine" loading="lazy">
+                <img src="images\coscous.jpg" alt="Plat tunisien" loading="lazy">
+            </div>
+        </div>
+    </div>
+</section>
+
+    
+    
+   
+
+    <section id="planifier">
+        <h2>Planifier un voyage</h2>
+        <div class="infos">
+            <p><strong>Visa :</strong> Exemption pour plusieurs nationalités (France, Algérie, Canada…).</p>
+            <p><strong>Meilleure période :</strong> Printemps (mars-mai) et automne (septembre-novembre).</p>
+            <p><strong>Transport :</strong> Louer une voiture, trains, louages (taxis collectifs), vols internes.</p>
+        </div>
+    </section>
+    
+
+    <section id="reserver" class="contact-section">
+        <div class="contact-container">
+            <div class="contact-header">
+                <h2>Réservez votre expérience</h2>
+                <p class="contact-subtitle">Complétez ce formulaire pour réserver votre prochaine aventure en Tunisie</p>
+            </div>
+    
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28"><path fill="none" d="M0 0h24v24H0z"/><path d="M3 3h18a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm9.06 8.683L5.648 6.238 4.353 7.762l7.72 6.555 7.581-6.56-1.308-1.513-6.285 5.439z" fill="#ff6600"/></svg>
+                        </div>
+                        <div class="info-text">
+                            <h3>Reserver</h3>
+                            <p>Veuillez creer un compte pour reserver</p>
+                            <a href="signup.html">Clique ici</a>
+                        </div>
+                    </div>
+                    
+                   
+                </div>
+                
+                
+                <div class="contact-info">
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28"><path fill="none" d="M0 0h24v24H0z"/><path d="M3 2h16.005C20.107 2 21 2.898 21 3.99v16.02c0 1.099-.893 1.99-1.995 1.99H3V2zm4 2H5v16h2V4zm2 16h10V4H9v16zm2-4a3 3 0 0 1 6 0h-6zm3-4a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm8-6h2v4h-2V6zm0 6h2v4h-2v-4z" fill="#ff6600"/></svg>
+                        </div>
+                        <div class="info-text">
+                            <h3>Adresse</h3>
+                            <p>123 Avenue Habib Bourguiba, Tunis 1000</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28"><path fill="none" d="M0 0h24v24H0z"/><path d="M21 16.42v3.536a1 1 0 0 1-.93.998c-.437.03-.794.046-1.07.046-8.837 0-16-7.163-16-16 0-.276.015-.633.046-1.07A1 1 0 0 1 4.044 3H7.58a.5.5 0 0 1 .498.45c.023.23.044.413.064.552A13.901 13.901 0 0 0 9.35 8.003c.095.2.033.439-.147.567l-2.158 1.542a13.047 13.047 0 0 0 6.844 6.844l1.54-2.154a.462.462 0 0 1 .573-.149 13.901 13.901 0 0 0 4 1.205c.139.02.322.042.55.064a.5.5 0 0 1 .449.498z" fill="#ff6600"/></svg>
+                        </div>
+                        <div class="info-text">
+                            <h3>Service réservation</h3>
+                            <p>+216 70 123 456</p>
+                            <p>+216 98 765 432</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28"><path fill="none" d="M0 0h24v24H0z"/><path d="M3 3h18a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm9.06 8.683L5.648 6.238 4.353 7.762l7.72 6.555 7.581-6.56-1.308-1.513-6.285 5.439z" fill="#ff6600"/></svg>
+                        </div>
+                        <div class="info-text">
+                            <h3>Email</h3>
+                            <p>reservations@tuniculture.tn</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card payment-methods">
+                        <div class="info-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28"><path fill="none" d="M0 0h24v24H0z"/><path d="M22 8.862a1 1 0 0 1-.5.864L3.5 21.924a1 1 0 0 1-1.5-.864V8.862a1 1 0 0 1 .5-.864L20.5 2.076a1 1 0 0 1 1.5.864v5.922zm-2 1.276V8.426A1 1 0 0 0 19 8a1 1 0 0 0-.966.502L12 16.012l-6.034-7.51A1 1 0 0 0 5 8a1 1 0 0 0-1 .926v1.698l9.546 3.927a1 1 0 0 0 .766 0L20 10.138z" fill="#ff6600"/></svg>
+                        </div>
+                        <div class="info-text">
+                            <h3>Modalités de paiement</h3>
+                            <p>Acompte de 30% à la réservation</p>
+                            <div class="payment-icons">
+                                <span class="payment-icon">💳 Carte bancaire</span>
+                                <span class="payment-icon">🏦 Virement</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <img src="images\logo_tuniculture_high_res.png" alt="Logo Tourisme Tunisie">
+                    </div>
+                    <p class="footer-about">
+                        Découvrez la Tunisie à travers nos yeux d'experts locaux. 
+                        Nous vous offrons des expériences authentiques depuis 2005.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+    
+                <div class="footer-col">
+                    <h3 class="footer-title">Explorer</h3>
+                    <ul class="footer-links">
+                        <li><a href="#destinations">Destinations</a></li>
+                        <li><a href="#experiences">Expériences</a></li>
+                        <li><a href="#festivals">Festivals</a></li>
+                        <li><a href="#apropos">À propos</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                    </ul>
+                </div>
+    
+                <div class="footer-col">
+                    <h3 class="footer-title">Informations</h3>
+                    <ul class="footer-info">
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Avenue Habib Bourguiba, Tunis 1000</li>
+                        <li><i class="fas fa-phone"></i> +216 50 242 988</li>
+                        <li><i class="fas fa-fax"></i> +216 50 242 988</li>
+                        <li><i class="fas fa-envelope"></i> info@tourismetunisie.com</li>
+                        <li><i class="fas fa-envelope"></i> reservations@tourismetunisie.com</li>
+                    </ul>
+                </div>
+    
+               
+            </div>
+    
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    &copy; 2023 Tourisme Tunisie. Tous droits réservés.
+                </div>
+                <div class="footer-legal">
+                    <a href="#">Politique de confidentialité</a>
+                    <a href="#">Conditions générales</a>
+                    <a href="#">Mentions légales</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/reservation.js"></script>
+</body>
+</html>
