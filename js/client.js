@@ -11,6 +11,9 @@ const firebaseConfig = {
 
 // Variables globales
 let db;
+let auth;
+let currentAuthUser = null;
+
 let userEmail = '';
 let userFullName = '';
 let userId = '';
@@ -22,30 +25,38 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initializeApp() {
-    // Récupérer les données utilisateur depuis localStorage
-    userEmail = localStorage.getItem('userEmail');
-    userFullName = localStorage.getItem('userFullName');
-    userId = localStorage.getItem('userId');
-    
-    if (!userEmail) {
-        alert('Session expirée. Veuillez vous reconnecter.');
-        window.location.href = 'login.html';
-        return;
-    }
-    
-    // Afficher le nom de l'utilisateur
-    document.getElementById('userFullName').textContent = userFullName || userEmail;
-    
-    // Initialiser Firebase
     try {
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
+
         db = firebase.firestore();
-        
-        setupEventListeners();
-        loadDestinations();
-        loadUserProfile();
+        auth = firebase.auth();
+
+        auth.onAuthStateChanged((user) => {
+            if (!user) {
+                currentAuthUser = null;
+
+                localStorage.removeItem('userData');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userFullName');
+                localStorage.removeItem('userId');
+
+                alert('Session expirée. Veuillez vous reconnecter.');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            currentAuthUser = user;
+            userId = user.uid;
+            userEmail = user.email || '';
+
+            setupEventListeners();
+            loadDestinations();
+            loadUserProfile();
+        });
+
     } catch (error) {
         console.error("Erreur d'initialisation Firebase:", error);
         showAlert('Erreur de connexion à la base de données', 'danger');
@@ -200,31 +211,33 @@ function displayDestinations() {
 
 // Gestion du profil
 function loadUserProfile() {
-    // Chercher l'utilisateur par email
+    if (!currentAuthUser) {
+        return;
+    }
+
     db.collection('users')
-        .where('email', '==', userEmail)
+        .doc(currentAuthUser.uid)
         .get()
-        .then((querySnapshot) => {
-            if (!querySnapshot.empty) {
-                const userDoc = querySnapshot.docs[0];
-                const userData = userDoc.data();
-                userId = userDoc.id;
-                
-                // Remplir le formulaire de profil
-                document.getElementById('profileFullName').value = userData.fullName || '';
-                document.getElementById('profileEmail').value = userData.email || '';
-                
-                // Mettre à jour les variables globales
-                userFullName = userData.fullName || userEmail;
-                document.getElementById('userFullName').textContent = userFullName;
-                
-                // Sauvegarder dans localStorage
-                localStorage.setItem('userFullName', userFullName);
-                localStorage.setItem('userId', userId);
+        .then((doc) => {
+            if (!doc.exists) {
+                throw new Error('User profile not found');
             }
+
+            const userData = doc.data();
+
+            userId = currentAuthUser.uid;
+            userEmail = currentAuthUser.email || userData.email || '';
+            userFullName = userData.fullName || currentAuthUser.displayName || userEmail;
+
+            document.getElementById('profileFullName').value = userFullName;
+            document.getElementById('profileEmail').value = userEmail;
+            document.getElementById('userFullName').textContent = userFullName;
+
+            localStorage.setItem('userFullName', userFullName);
+            localStorage.setItem('userId', userId);
         })
         .catch((error) => {
-            console.error("Erreur lors du chargement du profil: ", error);
+            console.error("Erreur lors du chargement du profil:", error);
             showAlert('Erreur lors du chargement du profil', 'danger');
         });
 }
@@ -525,10 +538,20 @@ function showAlert(message, type) {
 // Fonction de déconnexion
 function logout() {
     if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
-        localStorage.removeItem('userEmail');
-        localStorage.removeItem('userFullName');
-        localStorage.removeItem('userId');
-        window.location.href = 'login.html';
+        firebase.auth().signOut()
+            .then(() => {
+                localStorage.removeItem('userData');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userFullName');
+                localStorage.removeItem('userId');
+
+                window.location.href = 'login.html';
+            })
+            .catch((error) => {
+                console.error('Erreur lors de la déconnexion:', error);
+                showAlert('Erreur lors de la déconnexion', 'danger');
+            });
     }
 }
 
