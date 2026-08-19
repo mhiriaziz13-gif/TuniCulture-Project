@@ -280,12 +280,19 @@ function updateProfile() {
 // Gestion des réservations
 function submitReservation() {
     const submitBtn = document.getElementById('submitReservation');
+
+    if (!currentAuthUser) {
+        showAlert('Votre session a expiré. Veuillez vous reconnecter.', 'danger');
+        return;
+    }
+
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<span class="loading"></span><span>Traitement en cours...</span>';
-    
+
     const formData = {
+        ownerUid: currentAuthUser.uid,
         nom: userFullName,
-        email: userEmail,
+        email: currentAuthUser.email || userEmail,
         destination: document.getElementById('destination').value,
         telephone: document.getElementById('telephone').value,
         dateDepart: document.getElementById('dateDepart').value,
@@ -296,28 +303,27 @@ function submitReservation() {
         dateReservation: new Date(),
         statut: 'En attente'
     };
-    
+
     if (formData.experience === 'autre') {
         formData.autreExperience = document.getElementById('autreExperience').value;
     }
-    
-    db.collection('reservations').add(formData)
+
+    db.collection('reservations')
+        .add(formData)
         .then((docRef) => {
-            console.log("Réservation enregistrée avec ID: ", docRef.id);
-            
-            // Réinitialiser le formulaire
+            console.log('Réservation enregistrée avec ID:', docRef.id);
+
             document.getElementById('reservationForm').reset();
             document.getElementById('autreExperienceGroup').style.display = 'none';
-            
+
             showAlert('Réservation confirmée! Nous vous contacterons sous 24h.', 'success');
-            
-            // Recharger les réservations si on est sur cet onglet
+
             if (document.getElementById('mes-reservations').classList.contains('active')) {
                 loadUserReservations();
             }
         })
         .catch((error) => {
-            console.error("Erreur lors de l'ajout de la réservation: ", error);
+            console.error("Erreur lors de l'ajout de la réservation:", error);
             showAlert('Erreur lors de la réservation. Veuillez réessayer.', 'danger');
         })
         .finally(() => {
@@ -325,14 +331,20 @@ function submitReservation() {
             submitBtn.innerHTML = '<span>Confirmer la réservation</span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z" fill="currentColor"/></svg>';
         });
 }
-
 function loadUserReservations() {
     const reservationsList = document.getElementById('reservationsList');
-    reservationsList.innerHTML = '<div class="alert alert-info">Chargement de vos réservations...</div>';
-    
+
+    if (!currentAuthUser) {
+        reservationsList.innerHTML =
+            '<div class="alert alert-danger">Session expirée. Veuillez vous reconnecter.</div>';
+        return;
+    }
+
+    reservationsList.innerHTML =
+        '<div class="alert alert-info">Chargement de vos réservations...</div>';
+
     db.collection('reservations')
-        .where('email', '==', userEmail)
-        .orderBy('dateReservation', 'desc')
+        .where('ownerUid', '==', currentAuthUser.uid)
         .get()
         .then((querySnapshot) => {
             if (querySnapshot.empty) {
@@ -344,22 +356,50 @@ function loadUserReservations() {
                 `;
                 return;
             }
-            
-            let reservationsHtml = '<div class="reservations-grid">';
-            
+
+            const reservations = [];
+
             querySnapshot.forEach((doc) => {
-                reservationsHtml += createReservationCard(doc.id, doc.data());
+                reservations.push({
+                    id: doc.id,
+                    data: doc.data()
+                });
             });
-            
+
+            reservations.sort((a, b) => {
+                const aDate = a.data.dateReservation?.toDate
+                    ? a.data.dateReservation.toDate()
+                    : new Date(a.data.dateReservation || 0);
+
+                const bDate = b.data.dateReservation?.toDate
+                    ? b.data.dateReservation.toDate()
+                    : new Date(b.data.dateReservation || 0);
+
+                return bDate - aDate;
+            });
+
+            let reservationsHtml = '<div class="reservations-grid">';
+
+            reservations.forEach((reservation) => {
+                reservationsHtml += createReservationCard(
+                    reservation.id,
+                    reservation.data
+                );
+            });
+
             reservationsHtml += '</div>';
             reservationsList.innerHTML = reservationsHtml;
         })
         .catch((error) => {
-            console.error("Erreur lors du chargement des réservations: ", error);
-            reservationsList.innerHTML = '<div class="alert alert-danger">Erreur lors du chargement des réservations.</div>';
+            console.error(
+                "Erreur lors du chargement des réservations:",
+                error
+            );
+
+            reservationsList.innerHTML =
+                '<div class="alert alert-danger">Erreur lors du chargement des réservations.</div>';
         });
 }
-
 function createReservationCard(id, reservation) {
     const statusClass = reservation.statut.toLowerCase().replace(' ', '-');
     const experienceNames = {
@@ -444,6 +484,13 @@ function openEditModal(reservationId) {
         .then((doc) => {
             if (doc.exists) {
                 const reservation = doc.data();
+                if (
+    !currentAuthUser ||
+    reservation.ownerUid !== currentAuthUser.uid
+) {
+    showAlert('Vous n’êtes pas autorisé à accéder à cette réservation.', 'danger');
+    return;
+}
                 
                 // Remplir le formulaire d'édition
                 document.getElementById('editReservationId').value = reservationId;
