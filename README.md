@@ -299,8 +299,7 @@ TuniCulture-Project/
 │   ├── login.js
 │   ├── reservation.js
 │   ├── script.js
-│   ├── signup.js
-│   └── test.js
+│   └── signup.js
 │
 ├── images/
 │
