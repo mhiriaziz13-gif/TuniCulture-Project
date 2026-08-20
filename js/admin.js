@@ -144,7 +144,12 @@ auth.onAuthStateChanged(async user => {
             window.location.href = 'login.html';
             return;
         }
+currentUser = {
+    id: userDoc.id,
+    ...userDoc.data()
+};
 
+displayUserProfile(currentUser);
         dashboardContainer.classList.remove('hidden');
 
         loadDashboardData();
@@ -1034,33 +1039,6 @@ function closeModal() {
             default: return '';
         }
     }
-    function loadCurrentUserProfile() {
-        const user = auth.currentUser;
-        if (user) {
-            // Get user data from Firestore
-            db.collection('users').doc(user.uid).get()
-                .then(doc => {
-                    if (doc.exists) {
-                        currentUser = { id: doc.id, ...doc.data() };
-                        displayUserProfile(currentUser);
-                    } else {
-                        // If user document doesn't exist in Firestore, create one with auth data
-                        currentUser = {
-                            id: user.uid,
-                            email: user.email,
-                            fullName: user.displayName || 'Non renseigné',
-                            role: 'admin',
-                            createdAt: new Date()
-                        };
-                        displayUserProfile(currentUser);
-                    }
-                })
-                .catch(error => {
-                    console.error("Error loading user profile:", error);
-                });
-        }
-    }
-
     function displayUserProfile(user) {
         document.getElementById('profileFullName').textContent = user.fullName || 'Non renseigné';
         document.getElementById('profileRole').textContent = user.role || 'user';
@@ -1072,49 +1050,88 @@ function closeModal() {
         document.getElementById('profileCreatedAt').textContent = createdDate.toLocaleDateString('fr-FR') + ' à ' + createdDate.toLocaleTimeString('fr-FR');
     }
 
-    function openProfileModal() {
-        if (currentUser) {
-            document.getElementById('profileEditFullName').value = currentUser.fullName || '';
-            document.getElementById('profileEditEmail').value = currentUser.email || '';
-            document.getElementById('profileEditPassword').value = '';
-            
-            profileModal.style.display = 'block';
-        }
+function openProfileModal() {
+    if (!currentUser) {
+        return;
     }
+
+    document.getElementById('profileEditFullName').value =
+        currentUser.fullName || '';
+
+    document.getElementById('profileEditEmail').value =
+        currentUser.email || auth.currentUser?.email || '';
+
+    profileModal.style.display = 'block';
+}
 
     function closeProfileModal() {
         profileModal.style.display = 'none';
         profileForm.reset();
     }
 
-    function saveProfile() {
-        const fullName = document.getElementById('profileEditFullName').value.trim();
-        const email = document.getElementById('profileEditEmail').value.trim();
-        const password = document.getElementById('profileEditPassword').value.trim();
-        
-        if (!fullName || !email) {
-            alert('Veuillez remplir tous les champs obligatoires.');
-            return;
-        }
-        
-        const userData = {
-            fullName: fullName,
-            email: email
-        };
-        
-        // Update user in Firestore
-        db.collection('users').doc(currentUser.id).update(userData)
-            .then(() => {
-                currentUser = { ...currentUser, ...userData };
-                displayUserProfile(currentUser);
-                closeProfileModal();
-                alert('Profil mis à jour avec succès!');
-            })
-            .catch(error => {
-                console.error("Error updating profile:", error);
-                alert("Erreur lors de la mise à jour du profil.");
-            });
+function saveProfile() {
+    if (!currentUser) {
+        return;
     }
+
+    const fullName =
+        document
+            .getElementById('profileEditFullName')
+            .value
+            .trim();
+
+    if (!fullName) {
+        alert('Veuillez renseigner votre nom complet.');
+        return;
+    }
+
+    db.collection('users')
+        .doc(currentUser.id)
+        .update({
+            fullName
+        })
+        .then(() => {
+            currentUser = {
+                ...currentUser,
+                fullName
+            };
+
+            displayUserProfile(currentUser);
+            closeProfileModal();
+
+            const userIndex =
+                allUsers.findIndex(
+                    user => user.id === currentUser.id
+                );
+
+            if (userIndex !== -1) {
+                allUsers[userIndex] = {
+                    ...allUsers[userIndex],
+                    fullName
+                };
+
+                filteredUsers = filteredUsers.map(user =>
+                    user.id === currentUser.id
+                        ? { ...user, fullName }
+                        : user
+                );
+
+                renderUsersTable();
+            }
+
+            alert('Profil mis à jour avec succès!');
+        })
+        .catch(error => {
+            console.error(
+                'Error updating admin profile:',
+                error
+            );
+
+            alert(
+                "Erreur lors de la mise à jour du profil."
+            );
+        });
+}
 
     // Destinations functions
     function loadDestinationsData() {
