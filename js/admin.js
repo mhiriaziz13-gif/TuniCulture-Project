@@ -72,7 +72,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const userRoleInput = document.getElementById('userRole');
     const saveUserBtn = document.getElementById('saveUser');
     const cancelUserModalBtn = document.getElementById('cancelUserModal');
-    const deleteUserBtn = document.getElementById('deleteUser');
 
 
     const profileSection = document.getElementById('profileSection');
