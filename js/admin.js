@@ -51,7 +51,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const usersTableBody = document.getElementById('usersTableBody');
     const userRoleFilter = document.getElementById('userRoleFilter');
     const searchUsersInput = document.getElementById('searchUsers');
-    const addUserBtn = document.getElementById('addUserBtn');
     const prevUserPageBtn = document.getElementById('prevUserPage');
     const nextUserPageBtn = document.getElementById('nextUserPage');
     const userPaginationInfo = document.getElementById('userPaginationInfo');
@@ -71,7 +70,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const userNameInput = document.getElementById('userName');
     const userEmailInput = document.getElementById('userEmail');
     const userRoleInput = document.getElementById('userRole');
-    const userStatusInput = document.getElementById('userStatus');
     const saveUserBtn = document.getElementById('saveUser');
     const cancelUserModalBtn = document.getElementById('cancelUserModal');
     const deleteUserBtn = document.getElementById('deleteUser');
@@ -126,7 +124,6 @@ let currentUser = null;
     let currentUserPage = 1;
     const userPageSize = 10;
     let currentUserId = null;
-    let isEditingUser = false;
     
     auth.onAuthStateChanged(user => {
         if (user) {
@@ -226,18 +223,9 @@ let currentUser = null;
         cancelUserModalBtn.addEventListener('click', closeUserModal);
     }
     
-    if (addUserBtn) {
-        addUserBtn.addEventListener('click', () => {
-            openUserModal();
-        });
-    }
     
     if (saveUserBtn) {
         saveUserBtn.addEventListener('click', saveUser);
-    }
-    
-    if (deleteUserBtn) {
-        deleteUserBtn.addEventListener('click', deleteUser);
     }
     
     // Filters and search
@@ -425,210 +413,171 @@ let currentUser = null;
         renderUsersTable();
     }
     
-    function renderUsersTable() {
-        usersTableBody.innerHTML = '';
-        
-        const startIndex = (currentUserPage - 1) * userPageSize;
-        const endIndex = startIndex + userPageSize;
-        const pageData = filteredUsers.slice(startIndex, endIndex);
-        
-        if (pageData.length === 0) {
-            const emptyRow = document.createElement('tr');
-            emptyRow.innerHTML = `<td colspan="9" class="empty-table">Aucun utilisateur trouvé</td>`;
-            usersTableBody.appendChild(emptyRow);
-        } else {
-            pageData.forEach(user => {
-                const row = document.createElement('tr');
-                
-                const createdDate = new Date(user.createdAt);
-                const formattedCreatedDate = createdDate.toLocaleDateString('fr-FR');
-                
-                // For demonstration, we'll use a placeholder for last login
-                const lastLogin = "Non disponible";
-                const status = "active"; // Default status since it's not in your data structure
-                
-row.innerHTML = `
-    <td>${escapeHtml(user.id.substring(0, 8))}...</td>
-    <td>${escapeHtml(user.fullName || 'Non renseigné')}</td>
-    <td>${escapeHtml(user.email)}</td>
-    <td>
-        <span class="role-badge role-${escapeHtml(user.role)}">
-            ${escapeHtml(user.role)}
-        </span>
-    </td>
-    <td>${escapeHtml(formattedCreatedDate)}</td>
-    <td>
-        <span class="status-badge status-${status}">
-            ${escapeHtml(status)}
-        </span>
-    </td>
-    <td>
-        <button class="edit-user-btn" data-id="${user.id}" title="Modifier">
-            <i class="fas fa-edit"></i>
-        </button>
-        <button class="delete-user-btn" data-id="${user.id}" title="Supprimer">
-            <i class="fas fa-trash"></i>
-        </button>
-    </td>
-`;
-                
-                usersTableBody.appendChild(row);
-                
-                const editBtn = row.querySelector('.edit-user-btn');
-                const deleteBtn = row.querySelector('.delete-user-btn');
-                
-                editBtn.addEventListener('click', () => {
+function renderUsersTable() {
+    usersTableBody.innerHTML = '';
+
+    const startIndex = (currentUserPage - 1) * userPageSize;
+    const endIndex = startIndex + userPageSize;
+    const pageData = filteredUsers.slice(startIndex, endIndex);
+
+    if (pageData.length === 0) {
+        const emptyRow = document.createElement('tr');
+
+        emptyRow.innerHTML =
+            '<td colspan="6" class="empty-table">Aucun utilisateur trouvé</td>';
+
+        usersTableBody.appendChild(emptyRow);
+    } else {
+        pageData.forEach(user => {
+            const row = document.createElement('tr');
+
+            const createdDate = new Date(user.createdAt);
+
+            const formattedCreatedDate =
+                createdDate.toLocaleDateString('fr-FR');
+
+            row.innerHTML = `
+                <td>${escapeHtml(user.id.substring(0, 8))}...</td>
+
+                <td>
+                    ${escapeHtml(user.fullName || 'Non renseigné')}
+                </td>
+
+                <td>${escapeHtml(user.email)}</td>
+
+                <td>
+                    <span class="role-badge role-${escapeHtml(user.role)}">
+                        ${escapeHtml(user.role)}
+                    </span>
+                </td>
+
+                <td>${escapeHtml(formattedCreatedDate)}</td>
+
+                <td>
+                    <button
+                        class="edit-user-btn"
+                        data-id="${user.id}"
+                        title="Modifier"
+                    >
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </td>
+            `;
+
+            usersTableBody.appendChild(row);
+
+            row
+                .querySelector('.edit-user-btn')
+                .addEventListener('click', () => {
                     openUserModal(user);
                 });
-                
-                deleteBtn.addEventListener('click', () => {
-                    if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
-                        deleteUserById(user.id);
-                    }
-                });
-            });
-        }
-        
-        const totalPages = Math.ceil(filteredUsers.length / userPageSize);
-        userPaginationInfo.textContent = `Page ${currentUserPage} sur ${totalPages || 1}`;
-        
-        prevUserPageBtn.disabled = currentUserPage <= 1;
-        nextUserPageBtn.disabled = currentUserPage >= totalPages;
+        });
     }
+
+    const totalPages =
+        Math.ceil(filteredUsers.length / userPageSize);
+
+    userPaginationInfo.textContent =
+        `Page ${currentUserPage} sur ${totalPages || 1}`;
+
+    prevUserPageBtn.disabled = currentUserPage <= 1;
+    nextUserPageBtn.disabled = currentUserPage >= totalPages;
+}
     
-    function openUserModal(user = null) {
-        isEditingUser = !!user;
-        currentUserId = user ? user.id : null;
-        
-        if (isEditingUser) {
-            userModalTitle.textContent = 'Modifier l\'utilisateur';
-            userNameInput.value = user.fullName || '';
-            userEmailInput.value = user.email || '';
-            userRoleInput.value = user.role || 'user';
-            userStatusInput.value = 'active'; 
-            
-            deleteUserBtn.style.display = 'inline-block';
-        } else {
-            userModalTitle.textContent = 'Ajouter un utilisateur';
-            userForm.reset();
-            userRoleInput.value = 'user';
-            userStatusInput.value = 'active';
-            passwordGroup.style.display = 'block';
-            deleteUserBtn.style.display = 'none';
-        }
-        
-        userModal.style.display = 'block';
+    function openUserModal(user) {
+    if (!user) {
+        return;
     }
-    
-    function closeUserModal() {
-        userModal.style.display = 'none';
-        currentUserId = null;
-        isEditingUser = false;
-        userForm.reset();
+
+    currentUserId = user.id;
+
+    userModalTitle.textContent = "Modifier l'utilisateur";
+
+    userNameInput.value = user.fullName || '';
+    userEmailInput.value = user.email || '';
+    userRoleInput.value = user.role || 'user';
+
+    userModal.style.display = 'block';
+}
+
+function closeUserModal() {
+    userModal.style.display = 'none';
+    currentUserId = null;
+    userForm.reset();
+}
+
+function saveUser() {
+    if (!currentUserId) {
+        return;
     }
-    
-    function saveUser() {
-        const fullName = userNameInput.value.trim();
-        const email = userEmailInput.value.trim();
-        const role = userRoleInput.value;
-        const password = userPasswordInput.value.trim();
-        
-        if (!fullName || !email || !role) {
-            alert('Veuillez remplir tous les champs obligatoires.');
-            return;
-        }
-        
-        if (!isEditingUser && !password) {
-            alert('Le mot de passe est obligatoire pour un nouvel utilisateur.');
-            return;
-        }
-        
-        const userData = {
-            fullName: fullName,
-            email: email,
-            role: role
-        };
-        
-        if (isEditingUser) {
-            // Update existing user
-            db.collection('users').doc(currentUserId).update(userData)
-                .then(() => {
-                    if (password) {
-                        
-                        console.log('Password update would be handled separately');
-                    }
-                    
-                    const userIndex = allUsers.findIndex(u => u.id === currentUserId);
-                    if (userIndex !== -1) {
-                        allUsers[userIndex] = { ...allUsers[userIndex], ...userData };
-                        
-                        const filteredIndex = filteredUsers.findIndex(u => u.id === currentUserId);
-                        if (filteredIndex !== -1) {
-                            filteredUsers[filteredIndex] = { ...filteredUsers[filteredIndex], ...userData };
-                        }
-                    }
-                    
-                    renderUsersTable();
-                    closeUserModal();
-                    alert('Utilisateur mis à jour avec succès!');
-                })
-                .catch(error => {
-                    console.error("Error updating user:", error);
-                    alert("Erreur lors de la mise à jour de l'utilisateur.");
-                });
-        } else {
-            // Create new user
-            userData.createdAt = new Date();
-            
-            // First create user in Firestore
-            db.collection('users').add(userData)
-                .then((docRef) => {
-                    // In a real application, you would also create the user in Firebase Auth
-                    // This is a simplified version for demonstration
-                    
-                    const newUser = {
-                        id: docRef.id,
-                        ...userData
-                    };
-                    
-                    allUsers.unshift(newUser);
-                    filteredUsers.unshift(newUser);
-                    
-                    renderUsersTable();
-                    closeUserModal();
-                    alert('Utilisateur créé avec succès!');
-                })
-                .catch(error => {
-                    console.error("Error creating user:", error);
-                    alert("Erreur lors de la création de l'utilisateur.");
-                });
-        }
+
+    const fullName = userNameInput.value.trim();
+    const role = userRoleInput.value;
+
+    if (!fullName || !role) {
+        alert('Veuillez remplir tous les champs obligatoires.');
+        return;
     }
-    
-    function deleteUser() {
-        if (!currentUserId) return;
-        
-        if (confirm('Êtes-vous vraiment sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible.')) {
-            deleteUserById(currentUserId);
+
+    if (
+        currentUserId === auth.currentUser?.uid &&
+        role !== 'admin'
+    ) {
+        alert(
+            "Vous ne pouvez pas retirer votre propre rôle administrateur."
+        );
+        return;
+    }
+
+    const userData = {
+        fullName,
+        role
+    };
+
+    db.collection('users')
+        .doc(currentUserId)
+        .update(userData)
+        .then(() => {
+            const userIndex =
+                allUsers.findIndex(
+                    user => user.id === currentUserId
+                );
+
+            if (userIndex !== -1) {
+                allUsers[userIndex] = {
+                    ...allUsers[userIndex],
+                    ...userData
+                };
+            }
+
+            const filteredIndex =
+                filteredUsers.findIndex(
+                    user => user.id === currentUserId
+                );
+
+            if (filteredIndex !== -1) {
+                filteredUsers[filteredIndex] = {
+                    ...filteredUsers[filteredIndex],
+                    ...userData
+                };
+            }
+
+            renderUsersTable();
             closeUserModal();
-        }
-    }
-    
-    function deleteUserById(userId) {
-        db.collection('users').doc(userId).delete()
-            .then(() => {
-                allUsers = allUsers.filter(u => u.id !== userId);
-                filteredUsers = filteredUsers.filter(u => u.id !== userId);
-                
-                renderUsersTable();
-                alert('Utilisateur supprimé avec succès!');
-            })
-            .catch(error => {
-                console.error("Error deleting user:", error);
-                alert("Erreur lors de la suppression de l'utilisateur.");
-            });
-    }
-    
+
+            alert('Utilisateur mis à jour avec succès!');
+        })
+        .catch(error => {
+            console.error(
+                "Error updating user:",
+                error
+            );
+
+            alert(
+                "Erreur lors de la mise à jour de l'utilisateur."
+            );
+        });
+} 
     function fetchReservations() {
         return new Promise((resolve) => {
             const daysFilter = parseInt(dateRangeFilter.value);
