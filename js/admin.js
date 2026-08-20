@@ -15,7 +15,11 @@ try {
 } catch (error) {
     console.error("Erreur d'initialisation Firebase:", error);
 }
-
+function escapeHtml(value) {
+    const div = document.createElement('div');
+    div.textContent = value == null ? '' : String(value);
+    return div.innerHTML;
+}
 document.addEventListener('DOMContentLoaded', function() {
     const db = firebase.firestore();
     const auth = firebase.auth();
@@ -443,23 +447,30 @@ let currentUser = null;
                 const lastLogin = "Non disponible";
                 const status = "active"; // Default status since it's not in your data structure
                 
-                row.innerHTML = `
-                    <td>${user.id.substring(0, 8)}...</td>
-                    <td>${user.fullName || 'Non renseigné'}</td>
-                    <td>${user.email}</td>
-                    <td><span class="role-badge role-${user.role}">${user.role}</span></td>
-                    <td>${formattedCreatedDate}</td>
-                    
-                    <td><span class="status-badge status-${status}">${status}</span></td>
-                    <td>
-                        <button class="edit-user-btn" data-id="${user.id}" title="Modifier">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="delete-user-btn" data-id="${user.id}" title="Supprimer">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
+row.innerHTML = `
+    <td>${escapeHtml(user.id.substring(0, 8))}...</td>
+    <td>${escapeHtml(user.fullName || 'Non renseigné')}</td>
+    <td>${escapeHtml(user.email)}</td>
+    <td>
+        <span class="role-badge role-${escapeHtml(user.role)}">
+            ${escapeHtml(user.role)}
+        </span>
+    </td>
+    <td>${escapeHtml(formattedCreatedDate)}</td>
+    <td>
+        <span class="status-badge status-${status}">
+            ${escapeHtml(status)}
+        </span>
+    </td>
+    <td>
+        <button class="edit-user-btn" data-id="${user.id}" title="Modifier">
+            <i class="fas fa-edit"></i>
+        </button>
+        <button class="delete-user-btn" data-id="${user.id}" title="Supprimer">
+            <i class="fas fa-trash"></i>
+        </button>
+    </td>
+`;
                 
                 usersTableBody.appendChild(row);
                 
@@ -723,22 +734,30 @@ let currentUser = null;
                 if (reservation.statut === 'En attente') statusClass = 'status-pending';
                 if (reservation.statut === 'Annulée') statusClass = 'status-canceled';
                 
-                row.innerHTML = `
-                    <td>${reservation.id.substring(0, 8)}...</td>
-                    <td>${reservation.nom}</td>
-                    <td>${reservation.email}</td>
-                    <td>${reservation.telephone}</td>
-                    <td>${reservation.dateDepart}</td>
-                    <td>${reservation.adultes} adultes, ${reservation.enfants} enfants</td>
-                    <td>${reservation.experience === 'autre' ? reservation.autreExperience : reservation.experience}</td>
-                    <td>${formattedDate}</td>
-                    <td><span class="status-badge ${statusClass}">${reservation.statut}</span></td>
-                    <td>
-                        <button class="view-btn" data-id="${reservation.id}">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </td>
-                `;
+row.innerHTML = `
+    <td>${escapeHtml(reservation.id.substring(0, 8))}...</td>
+    <td>${escapeHtml(reservation.nom)}</td>
+    <td>${escapeHtml(reservation.email)}</td>
+    <td>${escapeHtml(reservation.telephone)}</td>
+    <td>${escapeHtml(reservation.dateDepart)}</td>
+    <td>${escapeHtml(reservation.adultes)} adultes, ${escapeHtml(reservation.enfants)} enfants</td>
+    <td>${escapeHtml(
+        reservation.experience === 'autre'
+            ? reservation.autreExperience
+            : reservation.experience
+    )}</td>
+    <td>${escapeHtml(formattedDate)}</td>
+    <td>
+        <span class="status-badge ${statusClass}">
+            ${escapeHtml(reservation.statut)}
+        </span>
+    </td>
+    <td>
+        <button class="view-btn" data-id="${reservation.id}">
+            <i class="fas fa-eye"></i>
+        </button>
+    </td>
+`;
                 
                 reservationsTableBody.appendChild(row);
                 
@@ -937,20 +956,46 @@ let currentUser = null;
     const formattedDate = reservationDate.toLocaleDateString('fr-FR') + ' ' + 
                         reservationDate.toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'});
     
-    modalBody.innerHTML = `
-        <div class="reservation-info">
-            <div class="info-row"><strong>ID:</strong> ${reservation.id}</div>
-            <div class="info-row"><strong>Nom:</strong> ${reservation.nom}</div>
-            <div class="info-row"><strong>Email:</strong> ${reservation.email}</div>
-            <div class="info-row"><strong>Téléphone:</strong> ${reservation.telephone}</div>
-            <div class="info-row"><strong>Date de départ:</strong> ${reservation.dateDepart}</div>
-            <div class="info-row"><strong>Adultes:</strong> ${reservation.adultes}</div>
-            <div class="info-row"><strong>Enfants:</strong> ${reservation.enfants}</div>
-            <div class="info-row"><strong>Expérience:</strong> ${reservation.experience === 'autre' ? reservation.autreExperience : reservation.experience}</div>
-            <div class="info-row"><strong>Date de réservation:</strong> ${formattedDate}</div>
-            <div class="info-row"><strong>Statut actuel:</strong> <span class="status-badge">${reservation.statut}</span></div>
+modalBody.innerHTML = `
+    <div class="reservation-info">
+        <div class="info-row">
+            <strong>ID:</strong> ${escapeHtml(reservation.id)}
         </div>
-    `;
+        <div class="info-row">
+            <strong>Nom:</strong> ${escapeHtml(reservation.nom)}
+        </div>
+        <div class="info-row">
+            <strong>Email:</strong> ${escapeHtml(reservation.email)}
+        </div>
+        <div class="info-row">
+            <strong>Téléphone:</strong> ${escapeHtml(reservation.telephone)}
+        </div>
+        <div class="info-row">
+            <strong>Date de départ:</strong> ${escapeHtml(reservation.dateDepart)}
+        </div>
+        <div class="info-row">
+            <strong>Adultes:</strong> ${escapeHtml(reservation.adultes)}
+        </div>
+        <div class="info-row">
+            <strong>Enfants:</strong> ${escapeHtml(reservation.enfants)}
+        </div>
+        <div class="info-row">
+            <strong>Expérience:</strong>
+            ${escapeHtml(
+                reservation.experience === 'autre'
+                    ? reservation.autreExperience
+                    : reservation.experience
+            )}
+        </div>
+        <div class="info-row">
+            <strong>Date de réservation:</strong> ${escapeHtml(formattedDate)}
+        </div>
+        <div class="info-row">
+            <strong>Statut actuel:</strong>
+            <span class="status-badge">${escapeHtml(reservation.statut)}</span>
+        </div>
+    </div>
+`;
     
     document.getElementById('updateStatus').value = reservation.statut;
     reservationModal.style.display = 'block';
@@ -1164,20 +1209,33 @@ function closeModal() {
                 const createdDate = new Date(destination.createdAt);
                 const formattedCreatedDate = createdDate.toLocaleDateString('fr-FR');
                 
-                row.innerHTML = `
-                    <td>${destination.id.substring(0, 8)}...</td>
-                    <td>${destination.name}</td>
-                    <td>${destination.description.length > 50 ? destination.description.substring(0, 50) + '...' : destination.description}</td>
-                    <td>${formattedCreatedDate}</td>
-                    <td>
-                        <button class="edit-destination-btn" data-id="${destination.id}" title="Modifier">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="delete-destination-btn" data-id="${destination.id}" title="Supprimer">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
+                const shortDescription =
+    destination.description.length > 50
+        ? destination.description.substring(0, 50) + '...'
+        : destination.description;
+
+row.innerHTML = `
+    <td>${escapeHtml(destination.id.substring(0, 8))}...</td>
+    <td>${escapeHtml(destination.name)}</td>
+    <td>${escapeHtml(shortDescription)}</td>
+    <td>${escapeHtml(formattedCreatedDate)}</td>
+    <td>
+        <button
+            class="edit-destination-btn"
+            data-id="${destination.id}"
+            title="Modifier"
+        >
+            <i class="fas fa-edit"></i>
+        </button>
+        <button
+            class="delete-destination-btn"
+            data-id="${destination.id}"
+            title="Supprimer"
+        >
+            <i class="fas fa-trash"></i>
+        </button>
+    </td>
+`;
                 
                 destinationsTableBody.appendChild(row);
                 
