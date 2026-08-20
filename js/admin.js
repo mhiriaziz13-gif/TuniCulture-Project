@@ -25,8 +25,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const auth = firebase.auth();
     
     const dashboardContainer = document.getElementById('dashboardContainer');
-    const loginForm = document.getElementById('loginForm');
-    const loginMessage = document.getElementById('loginMessage');
     const logoutBtn = document.getElementById('logoutBtn');
     
     const navLinks = document.querySelectorAll('.sidebar-nav a');
@@ -124,41 +122,51 @@ let currentUser = null;
     const userPageSize = 10;
     let currentUserId = null;
     
-    auth.onAuthStateChanged(user => {
-        if (user) {
-            dashboardContainer.classList.remove('hidden');
-            loadDashboardData();
-            loadUsersData();
-        } else {
-            dashboardContainer.classList.add('hidden');
-        }
-    });
-    
-    if (loginForm) {
-        loginForm.addEventListener('submit', e => {
-            e.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            loginMessage.textContent = "Connexion en cours...";
-            loginMessage.classList.remove('error');
-            
-            auth.signInWithEmailAndPassword(email, password)
-                .then(() => {
-                    loginMessage.textContent = "Connexion réussie!";
-                    setTimeout(() => {
-                        loginMessage.textContent = "";
-                    }, 2000);
-                })
-                .catch(error => {
-                    console.error("Login error:", error);
-                    loginMessage.textContent = error.message || "Échec de la connexion. Vérifiez vos identifiants.";
-                    loginMessage.classList.add('error');
-                });
-        });
+auth.onAuthStateChanged(async user => {
+    dashboardContainer.classList.add('hidden');
+
+    if (!user) {
+        window.location.href = 'login.html';
+        return;
     }
-    
+
+    try {
+        const userDoc = await db
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        if (
+            !userDoc.exists ||
+            userDoc.data()?.role !== 'admin'
+        ) {
+            await auth.signOut();
+            window.location.href = 'login.html';
+            return;
+        }
+
+        dashboardContainer.classList.remove('hidden');
+
+        loadDashboardData();
+        loadUsersData();
+    } catch (error) {
+        console.error(
+            'Admin authorization check failed:',
+            error
+        );
+
+        try {
+            await auth.signOut();
+        } catch (signOutError) {
+            console.error(
+                'Sign-out failed:',
+                signOutError
+            );
+        }
+
+        window.location.href = 'login.html';
+    }
+});    
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
             auth.signOut()
