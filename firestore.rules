@@ -1,0 +1,129 @@
+﻿rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && get(
+          /databases/$(database)/documents/users/$(request.auth.uid)
+        ).data.role == 'admin';
+    }
+
+    function validReservationCreate() {
+      return request.resource.data.keys().hasAll([
+        'nom',
+        'email',
+        'telephone',
+        'dateDepart',
+        'adultes',
+        'enfants',
+        'experience',
+        'commentaires',
+        'dateReservation',
+        'statut'
+      ])
+      && request.resource.data.keys().hasOnly([
+        'nom',
+        'email',
+        'telephone',
+        'dateDepart',
+        'adultes',
+        'enfants',
+        'experience',
+        'commentaires',
+        'dateReservation',
+        'statut',
+        'autreExperience',
+        'destination',
+        'ownerUid'
+      ])
+      && request.resource.data.statut == 'En attente';
+    }
+
+    match /users/{userId} {
+
+      allow create: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.data.role == 'user'
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.keys().hasAll([
+          'fullName',
+          'email',
+          'createdAt',
+          'role'
+        ])
+        && request.resource.data.keys().hasOnly([
+          'fullName',
+          'email',
+          'createdAt',
+          'role'
+        ]);
+
+      allow get: if signedIn()
+        && request.auth.uid == userId;
+
+      allow get, list: if isAdmin();
+
+      allow update: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.data
+          .diff(resource.data)
+          .affectedKeys()
+          .hasOnly(['fullName']);
+
+      allow update, delete: if isAdmin();
+    }
+
+    match /destinations/{destinationId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /reservations/{reservationId} {
+
+      allow create: if validReservationCreate()
+        && (
+          !('ownerUid' in request.resource.data)
+          ||
+          (
+            signedIn()
+            && request.resource.data.ownerUid == request.auth.uid
+            && request.resource.data.email == request.auth.token.email
+          )
+        );
+
+      allow get, list: if signedIn()
+        && resource.data.ownerUid == request.auth.uid;
+
+      allow get, list: if isAdmin();
+
+      allow update: if signedIn()
+        && resource.data.ownerUid == request.auth.uid
+        && resource.data.statut == 'En attente'
+        && request.resource.data
+          .diff(resource.data)
+          .affectedKeys()
+          .hasOnly([
+            'destination',
+            'telephone',
+            'dateDepart',
+            'adultes',
+            'enfants',
+            'experience',
+            'commentaires',
+            'autreExperience'
+          ]);
+
+      allow update, delete: if isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
