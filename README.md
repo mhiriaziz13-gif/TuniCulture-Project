@@ -2,7 +2,7 @@
 
 **Freelance tourism web platform for cultural discovery, reservation management and role-based administration in Tunisia.**
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Netlify-00C7B7?logo=netlify&logoColor=white)](https://tunisie-tourisme.netlify.app/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-000000?logo=vercel&logoColor=white)](https://tuni-culture-tunisia-excursion-book.vercel.app/)
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?logo=javascript&logoColor=black)
 ![Firebase](https://img.shields.io/badge/Firebase-Authentication%20%26%20Firestore-FFCA28?logo=firebase&logoColor=black)
 ![Security](https://img.shields.io/badge/Security-Role--based%20access-success)
@@ -27,7 +27,7 @@ The project was built with vanilla JavaScript and Firebase, with a particular fo
 - Firestore data security.
 
 **Live application:**  
-https://tunisie-tourisme.netlify.app/
+https://tuni-culture-tunisia-excursion-book.vercel.app/
 
 ---
 
@@ -400,9 +400,9 @@ firestore.rules
 
 ## Deployment
 
-The public version is deployed on Netlify:
+The public version is deployed on Vercel:
 
-**https://tunisie-tourisme.netlify.app/**
+**https://tuni-culture-tunisia-excursion-book.vercel.app/**
 
 The application itself is static, while authentication and persistence are handled through Firebase services.
 
