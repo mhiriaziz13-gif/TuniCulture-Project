@@ -319,7 +319,7 @@ TuniCulture-Project/
 | Authorization | Firestore Security Rules |
 | Analytics UI | Chart.js |
 | Email notifications | EmailJS |
-| Deployment | Netlify |
+| Deployment | Vercel |
 | Version control | Git & GitHub |
 
 ---
