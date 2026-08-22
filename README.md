@@ -281,30 +281,30 @@ Typical structure:
 ## Project Structure
 
 ```text
-TuniCulture-Project/
-│
-├── index.html
-├── client.html
-├── admin.html
-├── login.html
-├── signup.html
-├── forgot-password.html
-│
-├── css/
-│
-├── js/
-│   ├── admin.js
-│   ├── client.js
-│   ├── forgot-password.js
-│   ├── login.js
-│   ├── reservation.js
-│   ├── script.js
-│   └── signup.js
-│
-├── images/
-│
-├── firestore.rules
-└── README.md
+TuniCulture-Tunisia-Excursion-Booking-Platform/
+â”‚
+â”œâ”€â”€ index.html
+â”œâ”€â”€ client.html
+â”œâ”€â”€ admin.html
+â”œâ”€â”€ login.html
+â”œâ”€â”€ signup.html
+â”œâ”€â”€ forgot-password.html
+â”‚
+â”œâ”€â”€ css/
+â”‚
+â”œâ”€â”€ js/
+â”‚   â”œâ”€â”€ admin.js
+â”‚   â”œâ”€â”€ client.js
+â”‚   â”œâ”€â”€ forgot-password.js
+â”‚   â”œâ”€â”€ login.js
+â”‚   â”œâ”€â”€ reservation.js
+â”‚   â”œâ”€â”€ script.js
+â”‚   â””â”€â”€ signup.js
+â”‚
+â”œâ”€â”€ images/
+â”‚
+â”œâ”€â”€ firestore.rules
+â””â”€â”€ README.md
 ```
 
 ---
@@ -357,8 +357,8 @@ Creating privileged authentication accounts requires a trusted administrative en
 Clone the repository:
 
 ```bash
-git clone https://github.com/ahmedazizmhiri
-cd TuniCulture-Project
+git clone https://github.com/ahmedazizmhiri/TuniCulture-Tunisia-Excursion-Booking-Platform.git
+cd TuniCulture-Tunisia-Excursion-Booking-Platform
 ```
 
 Because the application is based on static HTML, CSS and JavaScript, it can be served with any local static web server.
@@ -428,7 +428,7 @@ It is presented as a freelance project and as part of a broader portfolio focuse
 
 **Ahmed Aziz Mhiri**
 
-Digital Transformation · Marketing & Commercial Analytics · Business Intelligence · Automation · Big Data & Applied AI
+Digital Transformation Â· Marketing & Commercial Analytics Â· Business Intelligence Â· Automation Â· Big Data & Applied AI
 
 Portfolio:  
 https://ahmedaziz-portfolio.vercel.app/
